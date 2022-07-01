@@ -24,5 +24,8 @@ namespace WindowsFormsApp1.ViewModels
         public string PasswordKey { get; set; }
         //[Display(Name = "Remember me?")]
         public bool RememberMe { get; set; }
+
+  
+
     }
 }

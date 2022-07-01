@@ -23,14 +23,15 @@ namespace WindowsFormsApp1
         private List<Tuple<string, Action<object, EventArgs>>> menuForms;
         private List<Button> btns;
         private ILog log = LogManager.GetLogger(typeof(Form1));
-
+        private string _directory;
         public Form1()
         {
             InitializeComponent();
 
-            
+            this._directory = Directory.GetCurrentDirectory() + @"\SmallPrograms";
 
-           
+
+
 
 
             var fileLog = new FileInfo(AppDomain.CurrentDomain.BaseDirectory + @"\log4net.config");            
@@ -70,12 +71,17 @@ namespace WindowsFormsApp1
 
         private void 打分數ToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            var scoreForm = new ScoreForm();
-            scoreForm.Show();
+            
         }
 
         private void Form1_Load(object sender, EventArgs e)
         {
+            var path = this._directory;
+            if(!Directory.Exists(path))
+            {
+                Directory.CreateDirectory(path);
+            }
+
             LoginForm loginForm = new LoginForm();
             
             loginForm.ShowDialog();
@@ -91,17 +97,36 @@ namespace WindowsFormsApp1
             validLoginViewModel = loginForm.TestAPIModel;
 
             //create Button
-            btns = validLoginViewModel.OrderGoodes.Select((r, idx) =>
+            btns = validLoginViewModel.DisplayAuthentications.Select((r, idx) =>
             {
-                var step = idx * 100;
+                var step = idx * 300;
                 var name = r.Value.Item2;
                 Button btn = new Button();
                 btn.Visible = true;
-                btn.Text = name;
+                btn.Enabled = r.Value.Item3;
+                btn.Text = r.Value.Item1;
                 btn.Size = new Size(200, 60);
 
                 btn.Location = new Point(450 + step, 150);
-                var btnEvent = this.menuForms.First(c => c.Item1 == name).Item2;
+                //var btnEvent = this.menuForms.First(c => c.Item1 == name).Item2;
+                var productPath = this._directory + @"\" + r.Key;
+                var productName = r.Value.Item1 + ".exe";
+                var product = Path.Combine(productPath, productName);
+                Action<object, System.EventArgs> btnEvent = (s,c) => 
+                {
+
+                    //var serverPrase = DESFunction.DESDecrypt("5CE47D09F1577500C585A9BE1535D91E21EB8251D6CC04E0392AAFBD2EA4DFB3", ProjectSet.PASSWORDKEY);
+                    //var acctPrase = DESFunction.DESDecrypt("39C359819BA80DD8F7F11655A03403CAEBAD4DC6489BBD7C", ProjectSet.PASSWORDKEY);
+                    //var pwdPrase = DESFunction.DESDecrypt("3466534F287AB753588B2EB865DE1962D2B773642A2885E4", ProjectSet.PASSWORDKEY);
+                    //var dbNamePrase = DESFunction.DESDecrypt("39C359819BA80DD8EF774CE538DA11D8", ProjectSet.PASSWORDKEY);
+
+                    Process exep = new Process();
+                    //加入密碼驅動
+                    exep.StartInfo.FileName = product;
+                    exep.StartInfo.UseShellExecute = false;
+                    exep.StartInfo.Arguments = "3466534F287AB753588B2EB865DE1962D2B773642A2885E4";
+                    exep.Start();
+                };
                 btn.Click += new System.EventHandler(btnEvent);
                 return btn;
             }).ToList();

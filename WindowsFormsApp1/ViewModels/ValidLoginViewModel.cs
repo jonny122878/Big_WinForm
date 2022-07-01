@@ -15,8 +15,7 @@ namespace WindowsFormsApp1.ViewModels
 
         public List<KeyValuePair<string, Tuple<DateTime, string, int, bool>>> OrderGoodes { get; set; }
 
-        //第一個項目為種類、二個名稱、三個為是否有權限
-        //種類方式GROUP 父Item 名稱部分為子Item項目
-        public List<Tuple<string,string, bool>> DisplayAuthentications { get;set;}
+        //訂單編號、名稱、版本、是否到期
+        public List<KeyValuePair<string, Tuple<string, string, bool>>> DisplayAuthentications { get; set; }
     }
 }
