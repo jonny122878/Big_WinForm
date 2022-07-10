@@ -141,6 +141,7 @@ namespace WindowsFormsApp1
 
         private async Task<bool> UpdatePrograms(List<string> downloadProucts)
         {
+            this.label4.Visible = false;
             this.label5.Visible = true;
             this.label5.Text = String.Format(@"小程式有{0}隻需更新中",downloadProucts.Count);
             //下載更新小程式
@@ -184,6 +185,7 @@ namespace WindowsFormsApp1
             Process exep = new Process();
             exep.StartInfo.FileName = Path.Combine(Directory.GetCurrentDirectory(), batch);
             exep.StartInfo.UseShellExecute = false;
+            exep.StartInfo.CreateNoWindow = true;
             exep.Start();
 
             return true;
