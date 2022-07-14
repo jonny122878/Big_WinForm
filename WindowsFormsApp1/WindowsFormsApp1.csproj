@@ -48,7 +48,7 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <PropertyGroup>
-    <ApplicationIcon>aaol0-6s496-001.ico</ApplicationIcon>
+    <ApplicationIcon>logo_ico64.ico</ApplicationIcon>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="LinqToExcel, Version=1.11.0.0, Culture=neutral, PublicKeyToken=9c8ea65a58f03f1f, processorArchitecture=MSIL">
@@ -177,6 +177,7 @@
     <Compile Include="Properties\Resources.Designer.cs">
       <AutoGen>True</AutoGen>
       <DependentUpon>Resources.resx</DependentUpon>
+      <DesignTime>True</DesignTime>
     </Compile>
     <None Include="packages.config" />
     <None Include="Properties\Settings.settings">
@@ -206,6 +207,8 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="aaol0-6s496-001.ico" />
+    <Content Include="logo_ico64.ico" />
+    <None Include="Resources\Logo_橫式.jpg" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
