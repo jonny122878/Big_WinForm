@@ -258,7 +258,7 @@ namespace WindowsFormsApp1
                                 }
 
                                 var localVersion = Convert.ToInt32(version.Split('.').Last());
-                                var webVersion = Convert.ToInt32(inner.Value.Item2.Split('.').Last());
+                                var webVersion = Convert.ToInt32(inner.Value.Item3.Split('.').Last());
                                 var product = (webVersion > localVersion) ? inner.Key : "";
                                 return product;
                             }).Where(r => r != "").ToList();

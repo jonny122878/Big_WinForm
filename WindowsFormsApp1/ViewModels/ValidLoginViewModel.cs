@@ -15,7 +15,7 @@ namespace WindowsFormsApp1.ViewModels
 
         public List<KeyValuePair<string, Tuple<DateTime, string, int, bool>>> OrderGoodes { get; set; }
 
-        //訂單編號、名稱、版本、是否到期
-        public List<KeyValuePair<string, Tuple<string, string, bool>>> DisplayAuthentications { get; set; }
+        //訂單編號、exe名稱、產品名稱、版本、是否到期
+        public List<KeyValuePair<string, Tuple<string,string, string, bool>>> DisplayAuthentications { get; set; }
     }
 }

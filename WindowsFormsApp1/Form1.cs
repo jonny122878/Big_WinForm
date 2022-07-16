@@ -103,8 +103,8 @@ namespace WindowsFormsApp1
                 var name = r.Value.Item2;
                 Button btn = new Button();
                 btn.Visible = true;
-                btn.Enabled = r.Value.Item3;
-                btn.Text = r.Value.Item1;
+                btn.Enabled = r.Value.Item4;
+                btn.Text = name;
                 btn.Size = new Size(200, 60);
 
                 btn.Location = new Point(450 + step, 150);
