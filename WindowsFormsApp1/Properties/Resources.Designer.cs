@@ -63,9 +63,9 @@ namespace WindowsFormsApp1.Properties {
         /// <summary>
         ///   查詢類型 System.Drawing.Bitmap 的當地語系化資源。
         /// </summary>
-        internal static System.Drawing.Bitmap Logo_橫式 {
+        internal static System.Drawing.Bitmap Logo_橫式_去背_ {
             get {
-                object obj = ResourceManager.GetObject("Logo_橫式", resourceCulture);
+                object obj = ResourceManager.GetObject("Logo_橫式_去背_", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }

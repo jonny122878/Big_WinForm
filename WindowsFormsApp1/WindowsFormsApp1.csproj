@@ -48,7 +48,7 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <PropertyGroup>
-    <ApplicationIcon>logo_ico64.ico</ApplicationIcon>
+    <ApplicationIcon>logo_ico64_transparent.ico</ApplicationIcon>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="LinqToExcel, Version=1.11.0.0, Culture=neutral, PublicKeyToken=9c8ea65a58f03f1f, processorArchitecture=MSIL">
@@ -208,6 +208,8 @@
   <ItemGroup>
     <Content Include="aaol0-6s496-001.ico" />
     <Content Include="logo_ico64.ico" />
+    <Content Include="logo_ico64_transparent.ico" />
+    <None Include="Resources\Logo_橫式%28去背%29.png" />
     <None Include="Resources\Logo_橫式.jpg" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

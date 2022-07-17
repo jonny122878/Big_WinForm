@@ -122,7 +122,7 @@
             // 
             // pictureBox1
             // 
-            this.pictureBox1.Image = global::WindowsFormsApp1.Properties.Resources.Logo_橫式;
+            this.pictureBox1.Image = global::WindowsFormsApp1.Properties.Resources.Logo_橫式_去背_;
             this.pictureBox1.Location = new System.Drawing.Point(114, 3);
             this.pictureBox1.Name = "pictureBox1";
             this.pictureBox1.Size = new System.Drawing.Size(468, 95);

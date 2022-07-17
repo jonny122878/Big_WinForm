@@ -50,7 +50,7 @@
             this.小程式資訊ToolStripMenuItem});
             this.menuStrip1.Location = new System.Drawing.Point(0, 0);
             this.menuStrip1.Name = "menuStrip1";
-            this.menuStrip1.Size = new System.Drawing.Size(1200, 31);
+            this.menuStrip1.Size = new System.Drawing.Size(1200, 32);
             this.menuStrip1.TabIndex = 0;
             this.menuStrip1.Text = "menuStrip1";
             // 
@@ -58,23 +58,25 @@
             // 
             this.支援ToolStripMenuItem.Alignment = System.Windows.Forms.ToolStripItemAlignment.Right;
             this.支援ToolStripMenuItem.Name = "支援ToolStripMenuItem";
-            this.支援ToolStripMenuItem.Size = new System.Drawing.Size(62, 27);
+            this.支援ToolStripMenuItem.Size = new System.Drawing.Size(62, 28);
             this.支援ToolStripMenuItem.Text = "支援";
             this.支援ToolStripMenuItem.Click += new System.EventHandler(this.支援ToolStripMenuItem_Click);
+            this.支援ToolStripMenuItem.Visible = false;
             // 
             // 主畫面ToolStripMenuItem
             // 
             this.主畫面ToolStripMenuItem.Name = "主畫面ToolStripMenuItem";
-            this.主畫面ToolStripMenuItem.Size = new System.Drawing.Size(80, 27);
+            this.主畫面ToolStripMenuItem.Size = new System.Drawing.Size(80, 28);
             this.主畫面ToolStripMenuItem.Text = "主畫面";
             this.主畫面ToolStripMenuItem.Click += new System.EventHandler(this.主畫面ToolStripMenuItem_Click);
             // 
             // 小程式資訊ToolStripMenuItem
             // 
             this.小程式資訊ToolStripMenuItem.Name = "小程式資訊ToolStripMenuItem";
-            this.小程式資訊ToolStripMenuItem.Size = new System.Drawing.Size(116, 27);
+            this.小程式資訊ToolStripMenuItem.Size = new System.Drawing.Size(116, 28);
             this.小程式資訊ToolStripMenuItem.Text = "小程式資訊";
             this.小程式資訊ToolStripMenuItem.Click += new System.EventHandler(this.小程式資訊ToolStripMenuItem_Click);
+            this.小程式資訊ToolStripMenuItem.Visible = false;
             // 
             // dataGridView1
             // 
@@ -85,12 +87,12 @@
             this.dataGridView1.AutoSizeRowsMode = System.Windows.Forms.DataGridViewAutoSizeRowsMode.AllCells;
             this.dataGridView1.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             this.dataGridView1.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.dataGridView1.Location = new System.Drawing.Point(0, 31);
+            this.dataGridView1.Location = new System.Drawing.Point(0, 32);
             this.dataGridView1.Margin = new System.Windows.Forms.Padding(4);
             this.dataGridView1.Name = "dataGridView1";
             this.dataGridView1.RowHeadersWidth = 62;
             this.dataGridView1.RowTemplate.Height = 24;
-            this.dataGridView1.Size = new System.Drawing.Size(1200, 644);
+            this.dataGridView1.Size = new System.Drawing.Size(1200, 643);
             this.dataGridView1.TabIndex = 1;
             this.dataGridView1.Visible = false;
             this.dataGridView1.CellContentClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dataGridView1_CellContentClick);

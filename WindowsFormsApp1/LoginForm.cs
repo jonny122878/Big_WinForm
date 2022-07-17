@@ -67,8 +67,8 @@ namespace WindowsFormsApp1
             this._baseAddr = ConfigurationManager.AppSettings["WebSite"];
             if (ConfigurationManager.AppSettings["IsTestConnect"] == "1")
             {
-                this.txtAcct.Text = @"test0906568135@gmail.com";
-                this.txtPwd.Text = "0906568135";
+                this.txtAcct.Text = @"topefficiencywork@gmail.com";
+                this.txtPwd.Text = "00000000";
                 //this._baseAddr = "https://localhost:44340/";
                 //this.button1_Click(null,null);
             }
