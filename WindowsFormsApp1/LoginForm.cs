@@ -58,19 +58,34 @@ namespace WindowsFormsApp1
         private bool _isLoin = false;
         private ValidLoginViewModel _testAPIModel;
         private string _baseAddr;
+        private string _smallProgram;
+        private string _smallProgramBackup;
         public LoginForm()
         {
             InitializeComponent();
         }
         private void LoginForm_Load(object sender, EventArgs e)
         {
+            this._smallProgram = AppDomain.CurrentDomain.BaseDirectory + @"SmallPrograms";
+            this._smallProgramBackup = AppDomain.CurrentDomain.BaseDirectory + @"SmallPrograms\Backup";
+
+            if(!Directory.Exists(this._smallProgram))
+            {
+                Directory.CreateDirectory(this._smallProgram);
+            }
+
+            if (!Directory.Exists(this._smallProgramBackup))
+            {
+                Directory.CreateDirectory(this._smallProgramBackup);
+            }
+
             this._baseAddr = ConfigurationManager.AppSettings["WebSite"];
             if (ConfigurationManager.AppSettings["IsTestConnect"] == "1")
             {
                 this.txtAcct.Text = @"topefficiencywork@gmail.com";
                 this.txtPwd.Text = "00000000";
                 //this._baseAddr = "https://localhost:44340/";
-                //this.button1_Click(null,null);
+                this.button1_Click(null,null);
             }
         }
         public bool IsLoin { get => _isLoin; set => _isLoin = value; }
@@ -139,11 +154,80 @@ namespace WindowsFormsApp1
             return _testAPIModel;
         }
 
-        private async Task<bool> UpdatePrograms(List<string> downloadProucts)
+        public void CopyAll(DirectoryInfo source, DirectoryInfo target)
+        {
+            Directory.CreateDirectory(target.FullName);
+
+            // Copy each file into the new directory.
+            foreach (FileInfo fi in source.GetFiles())
+            {
+                Console.WriteLine(@"Copying {0}\{1}", target.FullName, fi.Name);
+                fi.CopyTo(Path.Combine(target.FullName, fi.Name), true);
+            }
+
+            // Copy each subdirectory using recursion.
+            foreach (DirectoryInfo diSourceSubDir in source.GetDirectories())
+            {
+                DirectoryInfo nextTargetSubDir =
+                    target.CreateSubdirectory(diSourceSubDir.Name);
+                CopyAll(diSourceSubDir, nextTargetSubDir);
+            }
+        }
+
+        private async Task<List<KeyValuePair<string,string>>> UpdatePrograms(List<string> downloadProucts)
         {
             this.label4.Visible = false;
             this.label5.Visible = true;
             this.label5.Text = String.Format(@"小程式有{0}隻需更新中",downloadProucts.Count);
+
+            #region 產出Key => old dir Value => backup dir ,將更新版本、新增產品backup一份
+            var dirBackNow = this._smallProgramBackup + @"\"  + DateTime.Now.ToString("yyyyMMdd") + "_" + DateTime.Now.ToString("HHmmss");
+            Directory.CreateDirectory(dirBackNow);
+            Console.Write("");
+            var backupProducts = downloadProucts.Select(r =>
+            {
+                var oldDirectory = this._smallProgram + @"\" + r;
+                var newDirectory = "";
+
+                DirectoryInfo dirOld = new DirectoryInfo(this._smallProgram + @"\" + r);
+
+                if (!dirOld.Exists)
+                {
+                    newDirectory = dirBackNow + @"\" + r + "_insert";
+                }
+                else
+                {
+                    var exe = dirOld.GetFiles("*.exe").First();
+                    FileVersionInfo myFileVersionInfo = FileVersionInfo.GetVersionInfo(exe.FullName);
+                    newDirectory = String.Format(@"{0}\{1}_{2}",
+                        dirBackNow, r, myFileVersionInfo.FileVersion);
+                    //newDirectory = this._smallProgramBackup + "\\" + r + "_" + myFileVersionInfo.FileVersion;
+                }
+                return new KeyValuePair<string, string>(oldDirectory, newDirectory);
+            }).ToList();
+
+            Console.WriteLine("");
+
+            backupProducts.ForEach(product => 
+            {
+                if(!product.Value.EndsWith("insert"))
+                {
+                    DirectoryInfo diSource = new DirectoryInfo(product.Key);
+                    DirectoryInfo diTarget = new DirectoryInfo(product.Value);
+                    CopyAll(diSource, diTarget);                    
+                }
+                else
+                {
+                    Directory.CreateDirectory(product.Value);
+                }
+            });
+            #endregion
+
+            Console.Write("");
+            
+            Console.WriteLine("");
+            
+
             //下載更新小程式
             using (System.Net.Http.HttpClient client = new HttpClient())
             {
@@ -181,14 +265,50 @@ namespace WindowsFormsApp1
                     }
                 }
             }
+
+            #region 解壓縮替換產品
             var batch = "PraseZip.bat";
             Process exep = new Process();
             exep.StartInfo.FileName = Path.Combine(Directory.GetCurrentDirectory(), batch);
             exep.StartInfo.UseShellExecute = false;
             exep.StartInfo.CreateNoWindow = true;
             exep.Start();
+            exep.WaitForExit();
+            #endregion
 
-            return true;
+
+            #region 找出含有資料庫的資料夾並搬移
+
+            var includeDbs = backupProducts.Select(
+                r =>
+                {
+                    DirectoryInfo dir = new DirectoryInfo(r.Key);
+                    if (!dir.Exists)
+                    {
+                        return new KeyValuePair<string, string>("", "");
+                    }
+                    var db = dir.GetFiles("*.sqlite").FirstOrDefault();
+                    if (db != null)
+                    {
+                        var oldDb = Path.Combine(r.Key, db.Name);
+                        var newDb = Path.Combine(r.Value, db.Name);
+                        return new KeyValuePair<string, string>(oldDb, newDb);
+                    }
+                    return new KeyValuePair<string, string>("", "");
+                }).Where(r => r.Key != "").ToList();
+
+            Console.WriteLine("");
+
+
+            
+
+
+            #endregion
+
+
+
+
+            return includeDbs;
         }
 
         private async void button1_Click(object sender, EventArgs e)
@@ -231,9 +351,10 @@ namespace WindowsFormsApp1
             }
 
 
-                #region 本地端小程式版本
-                DirectoryInfo dir = new DirectoryInfo(Directory.GetCurrentDirectory() + "\\SmallPrograms");
-                var smallDirectories = dir.GetDirectories();
+            #region 本地端小程式版本
+                var userID = this.txtAcct.Text.Split('@')[0];
+                DirectoryInfo dir = new DirectoryInfo(Directory.GetCurrentDirectory() + @"\SmallPrograms");
+                var smallDirectories = dir.GetDirectories().Where(r => r.Name.StartsWith(userID)).ToList();
 
                 var productVersions = smallDirectories.Select(r =>
                 {
@@ -243,10 +364,11 @@ namespace WindowsFormsApp1
 
                     return new KeyValuePair<string, string>(r.Name, myFileVersionInfo.FileVersion);
                 }).ToDictionary(c => c.Key, c => c.Value);
-                #endregion
+                Console.Write("");
+            #endregion
 
-                #region 遠端本地小程式版本差異比對
-                List<string> downloadProucts = this._testAPIModel.DisplayAuthentications.GroupJoin(productVersions,
+            #region 遠端本地小程式版本差異比對(含建立新產品)
+            List<string> downloadProucts = this._testAPIModel.DisplayAuthentications.GroupJoin(productVersions,
                             inner => inner.Key,
                             outer => outer.Key,
                             (inner, outer) =>
@@ -271,13 +393,22 @@ namespace WindowsFormsApp1
                     return;
                 }
 
-                bool isUpdate = await this.UpdatePrograms(downloadProucts);
-                    
-                if(isUpdate)
+                List<KeyValuePair<string,string>> includeDbs = await this.UpdatePrograms(downloadProucts);
+                
+                if(includeDbs.Any())
                 {
+                    includeDbs.ForEach(item =>
+                    {
+                        File.Copy(item.Value, item.Key, true);
+                    });
+                }
+                
+
+            
+                
                     this._isLoin = true;
                     this.Close();
-                }
+                
         }
 
         private void splitContainer1_Panel2_Paint(object sender, PaintEventArgs e)
